@@ -5,6 +5,7 @@
 #include <QPaintEvent>
 #include <QInputDialog>
 #include <QButtonGroup>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,8 +18,9 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
+
     int mainField[30][16];
-    int mapLenght = 9;
+    int mapLength = 9;
     int mapWidth = 9;
     int numberMines = 10;
     void HideUnhideMenu(bool);
