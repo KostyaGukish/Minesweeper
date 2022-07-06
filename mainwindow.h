@@ -24,6 +24,7 @@ public:
     int mapWidth = 9;
     int numberMines = 10;
     void HideUnhideMenu(bool);
+    void ConnectButtons(QPushButton* buttons[9][9]);
 private:
     Ui::MainWindow* ui;
 protected:
