@@ -16,6 +16,8 @@ void MainWindow::HideUnhideMenu(bool hide)
         ui->label->show();
         ui->startGame->show();
     }
+
+    ui->groupBox->show();
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -25,7 +27,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     connect(ui->startGame, SIGNAL(clicked()), this, SLOT(startGame()));
     connect(ui->choose, SIGNAL(clicked()), this, SLOT(chooseDifficulty()));
-
+    ui->groupBox->hide();
 }
 
 MainWindow::~MainWindow()
