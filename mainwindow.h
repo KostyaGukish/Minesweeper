@@ -63,5 +63,23 @@ private slots:
     void on_button_62_clicked();
     void on_button_72_clicked();
     void on_button_82_clicked();
+    void on_button_03_clicked();
+    void on_button_13_clicked();
+    void on_button_23_clicked();
+    void on_button_33_clicked();
+    void on_button_43_clicked();
+    void on_button_53_clicked();
+    void on_button_63_clicked();
+    void on_button_73_clicked();
+    void on_button_83_clicked();
+    void on_button_04_clicked();
+    void on_button_14_clicked();
+    void on_button_24_clicked();
+    void on_button_34_clicked();
+    void on_button_44_clicked();
+    void on_button_54_clicked();
+    void on_button_64_clicked();
+    void on_button_74_clicked();
+    void on_button_84_clicked();
 };
 #endif // MAINWINDOW_H
