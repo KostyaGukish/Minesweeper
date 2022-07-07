@@ -19,13 +19,15 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
+    int field[9][9];
+//    std::vector<std::vector<QPushButton*>> buttons;
     QPushButton* buttons[9][9];
-    int mainField[30][16];
     int mapLength = 9;
     int mapWidth = 9;
     int numberMines = 10;
     void HideUnhideMenu(bool);
-    void ConnectButtons(QPushButton* buttons[9][9]);
+    void ConnectButtons();
+    void Clicked(int, int);
 private:
     Ui::MainWindow* ui;
 protected:
@@ -34,8 +36,32 @@ protected:
 private slots:
     void startGame();
     void chooseDifficulty();
-    void on_groupBox_clicked();
-    void on_groupBox_clicked(bool checked);
-    void on_groupBox_toggled(bool arg1);
+    void on_button_00_clicked();
+    void on_button_10_clicked();
+    void on_button_20_clicked();
+    void on_button_30_clicked();
+    void on_button_40_clicked();
+    void on_button_50_clicked();
+    void on_button_60_clicked();
+    void on_button_70_clicked();
+    void on_button_80_clicked();
+    void on_button_01_clicked();
+    void on_button_11_clicked();
+    void on_button_21_clicked();
+    void on_button_31_clicked();
+    void on_button_41_clicked();
+    void on_button_51_clicked();
+    void on_button_61_clicked();
+    void on_button_71_clicked();
+    void on_button_81_clicked();
+    void on_button_02_clicked();
+    void on_button_12_clicked();
+    void on_button_22_clicked();
+    void on_button_32_clicked();
+    void on_button_42_clicked();
+    void on_button_52_clicked();
+    void on_button_62_clicked();
+    void on_button_72_clicked();
+    void on_button_82_clicked();
 };
 #endif // MAINWINDOW_H

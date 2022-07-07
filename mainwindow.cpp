@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
+#include <queue>
 
 void MainWindow::HideUnhideMenu(bool hide)
 {
@@ -23,7 +24,7 @@ void MainWindow::HideUnhideMenu(bool hide)
     ui->groupBox->show();
 }
 
-void MainWindow::ConnectButtons(QPushButton* buttons[9][9])
+void MainWindow::ConnectButtons()
 {
     buttons[0][0] = ui->button_00;
     buttons[0][1] = ui->button_01;
@@ -135,44 +136,143 @@ MainWindow::~MainWindow()
 
 void MainWindow::paintEvent(QPaintEvent*)
 {
+}
 
+void MainWindow::Clicked(int x, int y) {
+    buttons[x][y]->setEnabled(false);
+    if (field[x][y] == -1) {
+//        game_over();
+        buttons[x][y]->setText("game_over");
+    }
+    else if (field[x][y] != 0) {
+        buttons[x][y]->setText(QString::number(field[x][y]));
+    } else {
+        std::queue<std::pair<int, int>> q;
+        q.push(std::make_pair(x, y));
+        while (!q.empty()) {
+            int ni = q.front().first;
+            int nj = q.front().second;
+            buttons[ni][nj]->setEnabled(false);
+            q.pop();
+
+            if (ni + 1 < 9 && buttons[ni + 1][nj]->isEnabled()){
+                if (field[ni + 1][nj] == 0) {
+                    q.push(std::make_pair(ni + 1, nj));
+                }
+                else {
+                    buttons[ni + 1][nj]->setText(QString::number(field[ni + 1][nj]));
+                    buttons[ni + 1][nj]->setEnabled(false);
+                }
+            }
+
+            if (ni - 1 >= 0 && buttons[ni - 1][nj]->isEnabled()) {
+                if (field[ni - 1][nj] == 0) {
+                    q.push(std::make_pair(ni - 1, nj));
+                } else {
+                    buttons[ni - 1][nj]->setText(QString::number(field[ni - 1][nj]));
+                    buttons[ni - 1][nj]->setEnabled(false);
+                }
+            }
+
+            if (nj + 1 < 9 && buttons[ni][nj + 1]->isEnabled()) {
+                if (field[ni][nj + 1] == 0) {
+                    q.push(std::make_pair(ni, nj + 1));
+                } else {
+                    buttons[ni][nj + 1]->setText(QString::number(field[ni][nj + 1]));
+                    buttons[ni][nj + 1]->setEnabled(false);
+                }
+            }
+
+            if (nj - 1 >= 0 && buttons[ni][nj - 1]->isEnabled()) {
+                if (field[ni][nj - 1] == 0) {
+                    q.push(std::make_pair(ni, nj - 1));
+                } else {
+                    buttons[ni][nj - 1]->setText(QString::number(field[ni][nj - 1]));
+                    buttons[ni][nj - 1]->setEnabled(false);
+                }
+            }
+
+            if (ni + 1 < 9 && nj + 1 < 9 && buttons[ni + 1][nj + 1]->isEnabled()) {
+                if (field[ni + 1][nj + 1] == 0) {
+                    q.push(std::make_pair(ni + 1, nj + 1));
+                } else {
+                    buttons[ni + 1][nj + 1]->setText(QString::number(field[ni + 1][nj + 1]));
+                    buttons[ni + 1][nj + 1]->setEnabled(false);
+                }
+            }
+
+            if (ni + 1 < 9 && nj - 1 >= 0 && buttons[ni + 1][nj - 1]->isEnabled()) {
+                if (field[ni + 1][nj - 1] == 0) {
+                    q.push(std::make_pair(ni + 1, nj - 1));
+                } else {
+                    buttons[ni + 1][nj - 1]->setText(QString::number(field[ni + 1][nj - 1]));
+                    buttons[ni + 1][nj - 1]->setEnabled(false);
+                }
+            }
+
+            if (ni - 1 >= 0 && nj + 1 < 9 && buttons[ni - 1][nj + 1]->isEnabled()) {
+                if (field[ni - 1][nj + 1] == 0) {
+                    q.push(std::make_pair(ni - 1, nj + 1));
+                } else {
+                    buttons[ni - 1][nj + 1]->setText(QString::number(field[ni - 1][nj + 1]));
+                    buttons[ni - 1][nj + 1]->setEnabled(false);
+                }
+            }
+
+            if (ni - 1 >= 0 && nj - 1 >= 0 && buttons[ni - 1][nj - 1]->isEnabled()) {
+                if (field[ni - 1][nj - 1] == 0) {
+                    q.push(std::make_pair(ni - 1, nj - 1));
+                } else {
+                    buttons[ni - 1][nj - 1]->setText(QString::number(field[ni - 1][nj - 1]));
+                    buttons[ni - 1][nj - 1]->setEnabled(false);
+                }
+            }
+
+        }
+
+    }
 }
 
 void MainWindow::startGame()
 {
     HideUnhideMenu(true);
-    std::vector<std::vector<int>> field(mapLength, std::vector<int> (mapWidth));
     std::vector<std::pair<int, int>> mines;
 
-    ConnectButtons(buttons);
+    ConnectButtons();
+
+    for(int i = 0; i < 9; i++) {
+        for(int j = 0; j < 9; j++) {
+            field[i][j] = 0;
+        }
+    }
 
     for(int i = 0; i < numberMines; i++) {
         int x = rand() % mapLength;
         int y = rand() % mapWidth;
         mines.push_back(std::make_pair(x, y));
         field[x][y] = -1;
-        if (x - 1 >= 0 && y - 1 >= 0) {
+        if (x - 1 >= 0 && y - 1 >= 0 && field[x - 1][y - 1] >= 0) {
             field[x - 1][y - 1]++;
         }
-        if (x + 1 < mapLength && y - 1 >= 0) {
+        if (x + 1 < mapLength && y - 1 >= 0  && field[x + 1][y - 1] >= 0) {
             field[x + 1][y - 1]++;
         }
-        if (x - 1 >= 0 && y + 1 < mapWidth) {
+        if (x - 1 >= 0 && y + 1 < mapWidth && field[x - 1][y + 1] >= 0) {
             field[x - 1][y + 1]++;
         }
-        if (x + 1 < mapLength && y + 1 < mapWidth) {
+        if (x + 1 < mapLength && y + 1 < mapWidth && field[x + 1][y + 1] >= 0) {
             field[x + 1][y + 1]++;
         }
-        if (x + 1 < mapLength) {
+        if (x + 1 < mapLength && field[x + 1][y] >= 0) {
             field[x + 1][y]++;
         }
-        if (x - 1 >= 0) {
+        if (x - 1 >= 0 && field[x - 1][y] >= 0) {
             field[x - 1][y]++;
         }
-        if (y + 1 < mapWidth) {
+        if (y + 1 < mapWidth && field[x][y + 1] >= 0) {
             field[x][y + 1]++;
         }
-        if (y - 1 >= 0) {
+        if (y - 1 >= 0  && field[x][y - 1] >= 0) {
             field[x][y - 1]++;
         }
     }
@@ -215,29 +315,160 @@ void MainWindow::chooseDifficulty()
     }
 }
 
-
-
-void MainWindow::on_groupBox_clicked()
+void MainWindow::on_button_00_clicked()
 {
-    QMessageBox::information(this, "Game Over", "gbfh");
-
-    for(int i = 0; i < 8; i++) {
-        for(int j = 0; j < 8; j++) {
-            if (buttons[i][j]->isChecked()) {
-                buttons[i][j]->setEnabled(true);
-            }
-        }
-    }
+    Clicked(0, 0);
 }
 
-void MainWindow::on_groupBox_clicked(bool checked)
+void MainWindow::on_button_10_clicked()
 {
-
-    QMessageBox::information(this, "Game Over", "gbfh");
+    Clicked(1, 0);
 }
 
-void MainWindow::on_groupBox_toggled(bool arg1)
+void MainWindow::on_button_20_clicked()
 {
-    QMessageBox::information(this, "Game Over", "gbfh");
+    Clicked(2, 0);
+}
+
+void MainWindow::on_button_30_clicked()
+{
+    Clicked(3, 0);
+}
+
+void MainWindow::on_button_40_clicked()
+{
+    Clicked(4, 0);
+}
+
+
+void MainWindow::on_button_50_clicked()
+{
+    Clicked(5, 0);
+}
+
+
+void MainWindow::on_button_60_clicked()
+{
+    Clicked(6, 0);
+}
+
+
+void MainWindow::on_button_70_clicked()
+{
+    Clicked(7, 0);
+}
+
+
+void MainWindow::on_button_80_clicked()
+{
+    Clicked(8, 0);
+}
+
+
+void MainWindow::on_button_01_clicked()
+{
+    Clicked(0, 1);
+}
+
+
+void MainWindow::on_button_11_clicked()
+{
+    Clicked(1, 1);
+}
+
+
+void MainWindow::on_button_21_clicked()
+{
+    Clicked(2, 1);
+}
+
+
+void MainWindow::on_button_31_clicked()
+{
+    Clicked(3, 1);
+}
+
+
+void MainWindow::on_button_41_clicked()
+{
+    Clicked(4, 1);
+}
+
+
+void MainWindow::on_button_51_clicked()
+{
+    Clicked(5, 1);
+}
+
+
+void MainWindow::on_button_61_clicked()
+{
+    Clicked(6, 1);
+}
+
+
+void MainWindow::on_button_71_clicked()
+{
+    Clicked(7, 1);
+}
+
+
+void MainWindow::on_button_81_clicked()
+{
+    Clicked(8, 1);
+}
+
+
+void MainWindow::on_button_02_clicked()
+{
+    Clicked(0, 2);
+}
+
+
+void MainWindow::on_button_12_clicked()
+{
+    Clicked(1, 2);
+}
+
+
+void MainWindow::on_button_22_clicked()
+{
+    Clicked(2, 2);
+}
+
+
+void MainWindow::on_button_32_clicked()
+{
+    Clicked(3, 2);
+}
+
+
+void MainWindow::on_button_42_clicked()
+{
+    Clicked(4, 2);
+}
+
+
+void MainWindow::on_button_52_clicked()
+{
+    Clicked(5, 2);
+}
+
+
+void MainWindow::on_button_62_clicked()
+{
+    Clicked(6, 2);
+}
+
+
+void MainWindow::on_button_72_clicked()
+{
+    Clicked(7, 2);
+}
+
+
+void MainWindow::on_button_82_clicked()
+{
+    Clicked(8, 2);
 }
 
