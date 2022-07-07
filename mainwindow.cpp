@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
+
 void MainWindow::HideUnhideMenu(bool hide)
 {
     if (hide)
@@ -133,42 +135,47 @@ MainWindow::~MainWindow()
 
 void MainWindow::paintEvent(QPaintEvent*)
 {
-    std::vector<std::vector<QPushButton>> buttons(mapLength, std::vector<QPushButton> (mapWidth));
-    std::vector<std::vector<int>> field(mapLength, std::vector<int> (mapWidth));
-    std::vector<std::pair<int, int>> mines;
-    
-    QPushButton* buttons[9][9];
-    ConnectButtons(buttons);
-
-    for(int i = 0; i < numberMines; i++)
-    {
-        int x = rand() % mapLength;
-        int y = rand() % mapWidth;
-        mines.push_back(std::make_pair(x, y));
-        field[x][y] = -1;
-        field[std::min(x - 1, 0)][std::min(y - 1, 0)]++;
-        field[x + 1][std::min(y - 1, 0)]++;
-        field[std::min(x - 1, 0)][y + 1]++;
-        field[std::max(x + 1, mapLength)][y + 1]++;
-        field[x + 1][y]++;
-        field[std::min(x - 1, 0)][y]++;
-        field[x][y + 1]++;
-        field[x][std::min(y - 1, 0)]++;
-    }
-
-    for(int i = 0; i < mapLength; i++)
-    {
-        for(int j = 0; j < mapWidth; j++)
-        {
-            field[m][j]
-        }
-    }
 
 }
 
 void MainWindow::startGame()
 {
     HideUnhideMenu(true);
+    std::vector<std::vector<int>> field(mapLength, std::vector<int> (mapWidth));
+    std::vector<std::pair<int, int>> mines;
+
+    ConnectButtons(buttons);
+
+    for(int i = 0; i < numberMines; i++) {
+        int x = rand() % mapLength;
+        int y = rand() % mapWidth;
+        mines.push_back(std::make_pair(x, y));
+        field[x][y] = -1;
+        if (x - 1 >= 0 && y - 1 >= 0) {
+            field[x - 1][y - 1]++;
+        }
+        if (x + 1 < mapLength && y - 1 >= 0) {
+            field[x + 1][y - 1]++;
+        }
+        if (x - 1 >= 0 && y + 1 < mapWidth) {
+            field[x - 1][y + 1]++;
+        }
+        if (x + 1 < mapLength && y + 1 < mapWidth) {
+            field[x + 1][y + 1]++;
+        }
+        if (x + 1 < mapLength) {
+            field[x + 1][y]++;
+        }
+        if (x - 1 >= 0) {
+            field[x - 1][y]++;
+        }
+        if (y + 1 < mapWidth) {
+            field[x][y + 1]++;
+        }
+        if (y - 1 >= 0) {
+            field[x][y - 1]++;
+        }
+    }
 }
 
 void MainWindow::chooseDifficulty()
@@ -206,8 +213,31 @@ void MainWindow::chooseDifficulty()
             numberMines = 20;
         }
     }
-
-
 }
 
+
+
+void MainWindow::on_groupBox_clicked()
+{
+    QMessageBox::information(this, "Game Over", "gbfh");
+
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            if (buttons[i][j]->isChecked()) {
+                buttons[i][j]->setEnabled(true);
+            }
+        }
+    }
+}
+
+void MainWindow::on_groupBox_clicked(bool checked)
+{
+
+    QMessageBox::information(this, "Game Over", "gbfh");
+}
+
+void MainWindow::on_groupBox_toggled(bool arg1)
+{
+    QMessageBox::information(this, "Game Over", "gbfh");
+}
 

@@ -19,6 +19,7 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
+    QPushButton* buttons[9][9];
     int mainField[30][16];
     int mapLength = 9;
     int mapWidth = 9;
@@ -33,5 +34,8 @@ protected:
 private slots:
     void startGame();
     void chooseDifficulty();
+    void on_groupBox_clicked();
+    void on_groupBox_clicked(bool checked);
+    void on_groupBox_toggled(bool arg1);
 };
 #endif // MAINWINDOW_H
