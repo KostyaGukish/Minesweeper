@@ -24,6 +24,19 @@ void MainWindow::HideUnhideMenu(bool hide)
     ui->groupBox->show();
 }
 
+void MainWindow::gameOver()
+{
+    ui->label_2->show();
+    for (int i = 0; i < mapLength; i++) {
+        for (int j = 0; j < mapWidth; j++) {
+            if (buttons[i][j]->isEnabled()) {
+                Clicked(i, j);
+            }
+        }
+    }
+
+}
+
 void MainWindow::ConnectButtons()
 {
     buttons[0][0] = ui->button_00;
@@ -127,6 +140,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     //TODO
     ui->groupBox->hide();
+    ui->label_2->hide();
 }
 
 MainWindow::~MainWindow()
@@ -138,15 +152,27 @@ void MainWindow::paintEvent(QPaintEvent*)
 {
 }
 
+bool MainWindow::eventFilter(QEvent* event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::RightButton)
+            return true;
+    }
+    return false;
+}
+
+
 void MainWindow::Clicked(int x, int y) {
     buttons[x][y]->setEnabled(false);
     if (field[x][y] == -1) {
-//        game_over();
-        buttons[x][y]->setText("game_over");
+        gameOver();
+        buttons[x][y]->setIcon(QIcon("C:\\Users\\MI\\OneDrive\\Рабочий стол\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
     }
     else if (field[x][y] != 0) {
         buttons[x][y]->setText(QString::number(field[x][y]));
-    } else {
+    }
+    else {
         std::queue<std::pair<int, int>> q;
         q.push(std::make_pair(x, y));
         while (!q.empty()) {
@@ -155,7 +181,7 @@ void MainWindow::Clicked(int x, int y) {
             buttons[ni][nj]->setEnabled(false);
             q.pop();
 
-            if (ni + 1 < 9 && buttons[ni + 1][nj]->isEnabled()){
+            if (ni + 1 < 9 && buttons[ni + 1][nj]->isEnabled()) {
                 if (field[ni + 1][nj] == 0) {
                     q.push(std::make_pair(ni + 1, nj));
                 }
@@ -168,7 +194,8 @@ void MainWindow::Clicked(int x, int y) {
             if (ni - 1 >= 0 && buttons[ni - 1][nj]->isEnabled()) {
                 if (field[ni - 1][nj] == 0) {
                     q.push(std::make_pair(ni - 1, nj));
-                } else {
+                }
+                else {
                     buttons[ni - 1][nj]->setText(QString::number(field[ni - 1][nj]));
                     buttons[ni - 1][nj]->setEnabled(false);
                 }
@@ -177,7 +204,8 @@ void MainWindow::Clicked(int x, int y) {
             if (nj + 1 < 9 && buttons[ni][nj + 1]->isEnabled()) {
                 if (field[ni][nj + 1] == 0) {
                     q.push(std::make_pair(ni, nj + 1));
-                } else {
+                }
+                else {
                     buttons[ni][nj + 1]->setText(QString::number(field[ni][nj + 1]));
                     buttons[ni][nj + 1]->setEnabled(false);
                 }
@@ -186,7 +214,8 @@ void MainWindow::Clicked(int x, int y) {
             if (nj - 1 >= 0 && buttons[ni][nj - 1]->isEnabled()) {
                 if (field[ni][nj - 1] == 0) {
                     q.push(std::make_pair(ni, nj - 1));
-                } else {
+                }
+                else {
                     buttons[ni][nj - 1]->setText(QString::number(field[ni][nj - 1]));
                     buttons[ni][nj - 1]->setEnabled(false);
                 }
@@ -195,7 +224,8 @@ void MainWindow::Clicked(int x, int y) {
             if (ni + 1 < 9 && nj + 1 < 9 && buttons[ni + 1][nj + 1]->isEnabled()) {
                 if (field[ni + 1][nj + 1] == 0) {
                     q.push(std::make_pair(ni + 1, nj + 1));
-                } else {
+                }
+                else {
                     buttons[ni + 1][nj + 1]->setText(QString::number(field[ni + 1][nj + 1]));
                     buttons[ni + 1][nj + 1]->setEnabled(false);
                 }
@@ -204,7 +234,8 @@ void MainWindow::Clicked(int x, int y) {
             if (ni + 1 < 9 && nj - 1 >= 0 && buttons[ni + 1][nj - 1]->isEnabled()) {
                 if (field[ni + 1][nj - 1] == 0) {
                     q.push(std::make_pair(ni + 1, nj - 1));
-                } else {
+                }
+                else {
                     buttons[ni + 1][nj - 1]->setText(QString::number(field[ni + 1][nj - 1]));
                     buttons[ni + 1][nj - 1]->setEnabled(false);
                 }
@@ -213,7 +244,8 @@ void MainWindow::Clicked(int x, int y) {
             if (ni - 1 >= 0 && nj + 1 < 9 && buttons[ni - 1][nj + 1]->isEnabled()) {
                 if (field[ni - 1][nj + 1] == 0) {
                     q.push(std::make_pair(ni - 1, nj + 1));
-                } else {
+                }
+                else {
                     buttons[ni - 1][nj + 1]->setText(QString::number(field[ni - 1][nj + 1]));
                     buttons[ni - 1][nj + 1]->setEnabled(false);
                 }
@@ -222,7 +254,8 @@ void MainWindow::Clicked(int x, int y) {
             if (ni - 1 >= 0 && nj - 1 >= 0 && buttons[ni - 1][nj - 1]->isEnabled()) {
                 if (field[ni - 1][nj - 1] == 0) {
                     q.push(std::make_pair(ni - 1, nj - 1));
-                } else {
+                }
+                else {
                     buttons[ni - 1][nj - 1]->setText(QString::number(field[ni - 1][nj - 1]));
                     buttons[ni - 1][nj - 1]->setEnabled(false);
                 }
@@ -240,13 +273,13 @@ void MainWindow::startGame()
 
     ConnectButtons();
 
-    for(int i = 0; i < 9; i++) {
-        for(int j = 0; j < 9; j++) {
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 9; j++) {
             field[i][j] = 0;
         }
     }
 
-    for(int i = 0; i < numberMines; i++) {
+    for (int i = 0; i < numberMines; i++) {
         int x = rand() % mapLength;
         int y = rand() % mapWidth;
         mines.push_back(std::make_pair(x, y));
@@ -254,7 +287,7 @@ void MainWindow::startGame()
         if (x - 1 >= 0 && y - 1 >= 0 && field[x - 1][y - 1] >= 0) {
             field[x - 1][y - 1]++;
         }
-        if (x + 1 < mapLength && y - 1 >= 0  && field[x + 1][y - 1] >= 0) {
+        if (x + 1 < mapLength && y - 1 >= 0 && field[x + 1][y - 1] >= 0) {
             field[x + 1][y - 1]++;
         }
         if (x - 1 >= 0 && y + 1 < mapWidth && field[x - 1][y + 1] >= 0) {
@@ -272,7 +305,7 @@ void MainWindow::startGame()
         if (y + 1 < mapWidth && field[x][y + 1] >= 0) {
             field[x][y + 1]++;
         }
-        if (y - 1 >= 0  && field[x][y - 1] >= 0) {
+        if (y - 1 >= 0 && field[x][y - 1] >= 0) {
             field[x][y - 1]++;
         }
     }
@@ -773,4 +806,3 @@ void MainWindow::on_button_88_clicked()
 {
     Clicked(8, 8);
 }
-

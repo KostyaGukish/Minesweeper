@@ -5,6 +5,7 @@
 #include <QPaintEvent>
 #include <QInputDialog>
 #include <QButtonGroup>
+#include <QMouseEvent>
 #include <vector>
 
 QT_BEGIN_NAMESPACE
@@ -20,7 +21,7 @@ public:
     ~MainWindow();
 
     int field[9][9];
-//    std::vector<std::vector<QPushButton*>> buttons;
+    //    std::vector<std::vector<QPushButton*>> buttons;
     QPushButton* buttons[9][9];
     int mapLength = 9;
     int mapWidth = 9;
@@ -28,10 +29,13 @@ public:
     void HideUnhideMenu(bool);
     void ConnectButtons();
     void Clicked(int, int);
+    void gameOver();
+    bool eventFilter(QEvent* event);
 private:
     Ui::MainWindow* ui;
 protected:
     void paintEvent(QPaintEvent*) override;
+
 
 private slots:
     void startGame();
