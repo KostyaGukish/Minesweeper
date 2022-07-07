@@ -558,3 +558,219 @@ void MainWindow::on_button_84_clicked()
     Clicked(8, 4);
 }
 
+
+void MainWindow::on_button_05_clicked()
+{
+    Clicked(0, 5);
+}
+
+
+void MainWindow::on_button_15_clicked()
+{
+    Clicked(1, 5);
+}
+
+
+void MainWindow::on_button_25_clicked()
+{
+    Clicked(2, 5);
+}
+
+
+void MainWindow::on_button_35_clicked()
+{
+    Clicked(3, 5);
+}
+
+
+void MainWindow::on_button_45_clicked()
+{
+    Clicked(4, 5);
+}
+
+
+void MainWindow::on_button_55_clicked()
+{
+    Clicked(5, 5);
+}
+
+
+void MainWindow::on_button_65_clicked()
+{
+    Clicked(6, 5);
+}
+
+
+void MainWindow::on_button_75_clicked()
+{
+    Clicked(7, 5);
+}
+
+
+void MainWindow::on_button_85_clicked()
+{
+    Clicked(8, 5);
+}
+
+
+void MainWindow::on_button_06_clicked()
+{
+    Clicked(0, 6);
+}
+
+
+void MainWindow::on_button_16_clicked()
+{
+    Clicked(1, 6);
+}
+
+
+void MainWindow::on_button_26_clicked()
+{
+    Clicked(2, 6);
+}
+
+
+void MainWindow::on_button_36_clicked()
+{
+    Clicked(3, 6);
+}
+
+
+void MainWindow::on_button_46_clicked()
+{
+    Clicked(4, 6);
+}
+
+
+void MainWindow::on_button_56_clicked()
+{
+    Clicked(5, 6);
+}
+
+
+void MainWindow::on_button_66_clicked()
+{
+    Clicked(6, 6);
+}
+
+
+void MainWindow::on_button_76_clicked()
+{
+    Clicked(7, 6);
+}
+
+
+void MainWindow::on_button_86_clicked()
+{
+    Clicked(8, 6);
+}
+
+
+void MainWindow::on_button_07_clicked()
+{
+    Clicked(0, 7);
+}
+
+
+void MainWindow::on_button_17_clicked()
+{
+    Clicked(1, 7);
+}
+
+
+void MainWindow::on_button_27_clicked()
+{
+    Clicked(2, 7);
+}
+
+
+void MainWindow::on_button_37_clicked()
+{
+    Clicked(3, 7);
+}
+
+
+void MainWindow::on_button_47_clicked()
+{
+    Clicked(4, 7);
+}
+
+
+void MainWindow::on_button_57_clicked()
+{
+    Clicked(5, 7);
+}
+
+
+void MainWindow::on_button_67_clicked()
+{
+    Clicked(6, 7);
+}
+
+
+void MainWindow::on_button_77_clicked()
+{
+    Clicked(7, 7);
+}
+
+
+void MainWindow::on_button_87_clicked()
+{
+    Clicked(8, 7);
+}
+
+
+void MainWindow::on_button_08_clicked()
+{
+    Clicked(0, 8);
+}
+
+
+void MainWindow::on_button_18_clicked()
+{
+    Clicked(1, 8);
+}
+
+
+void MainWindow::on_button_28_clicked()
+{
+    Clicked(2, 8);
+}
+
+
+void MainWindow::on_button_38_clicked()
+{
+    Clicked(3, 8);
+}
+
+
+void MainWindow::on_button_48_clicked()
+{
+    Clicked(4, 8);
+}
+
+
+void MainWindow::on_button_58_clicked()
+{
+    Clicked(5, 8);
+}
+
+
+void MainWindow::on_button_68_clicked()
+{
+    Clicked(6, 8);
+}
+
+
+void MainWindow::on_button_78_clicked()
+{
+    Clicked(7, 8);
+}
+
+
+void MainWindow::on_button_88_clicked()
+{
+    Clicked(8, 8);
+}
+
