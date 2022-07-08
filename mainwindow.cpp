@@ -24,6 +24,23 @@ void MainWindow::HideUnhideMenu(bool hide)
     ui->groupBox->show();
 }
 
+bool CompareQIcon(const QIcon& icon1, const QIcon& icon2)
+{
+  QByteArray a1;
+  QDataStream stream1(&a1, QIODevice::WriteOnly);
+  stream1 << icon1;
+
+  QByteArray a2;
+  QDataStream stream2(&a2, QIODevice::WriteOnly);
+  stream2 << icon2;
+
+  return a1 == a2;
+}
+
+bool IsMarketWithFlag(QPushButton *button){
+    return CompareQIcon(button->icon(),QIcon("C:\\Users\\MI\\source\\repos\\pricol\\flag.png"));
+}
+
 void MainWindow::gameOver(QString message)
 {
     for (int i = 0; i < mapLength; i++) {
@@ -31,7 +48,7 @@ void MainWindow::gameOver(QString message)
             if (buttons[i][j]->isEnabled()) {
                 buttons[i][j]->setEnabled(false);
                 if (field[i][j] == -1) {
-                    buttons[i][j]->setIcon(QIcon("C:\\Qt\\projects\\minesweeper\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
+                    buttons[i][j]->setIcon(QIcon("C:\\Users\\MI\\source\\repos\\pricol\\mine.png"));
                 }
                 else if (field[i][j] != 0) {
                     buttons[i][j]->setText(QString::number(field[i][j]));
@@ -143,9 +160,9 @@ MainWindow::MainWindow(QWidget* parent)
     ui->setupUi(this);
     connect(ui->startGame, SIGNAL(clicked()), this, SLOT(startGame()));
     connect(ui->choose, SIGNAL(clicked()), this, SLOT(chooseDifficulty()));
-
+    connect(ui->About,SIGNAL(clicked()),this,SLOT(About()));
     ConnectButtons();
-
+    ui->flagCheck->hide();
     for (int i = 0; i < mapLength; i++) {
         for (int j = 0; j < mapWidth; j++) {
             buttons[i][j]->setEnabled(false);
@@ -162,21 +179,22 @@ void MainWindow::paintEvent(QPaintEvent*)
 {
 }
 
-bool MainWindow::eventFilter(QEvent* event)
-{
-    if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::RightButton)
-            return true;
-    }
-    return false;
-}
-
-
 void MainWindow::Clicked(int x, int y) {
+
+    if(IsMarketWithFlag(buttons[x][y])  && ui->flagCheck->isChecked())
+    {
+        buttons[x][y]->setIcon(QIcon());
+        return;
+    }
+
+    if (ui->flagCheck->isChecked()){
+        buttons[x][y]->setIcon(QIcon("C:\\Users\\MI\\source\\repos\\pricol\\flag.png"));
+        return;
+    }
+
     buttons[x][y]->setEnabled(false);
     if (field[x][y] == -1) {
-        buttons[x][y]->setIcon(QIcon("C:\\Qt\\projects\\minesweeper\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
+        buttons[x][y]->setIcon(QIcon("C:\\Users\\MI\\source\\repos\\pricol\\mine.png"));
         gameOver("You lose(");
     }
     else if (field[x][y] != 0) {
@@ -291,7 +309,7 @@ void MainWindow::Clicked(int x, int y) {
 void MainWindow::startGame()
 {
     //HideUnhideMenu(true);
-
+    ui->flagCheck->show();
     ui->startGame->setText("Restart Game");
 
     for (int i = 0; i < 9; i++) {
@@ -376,6 +394,11 @@ void MainWindow::chooseDifficulty()
             numberMines = 20;
         }
     }
+}
+
+void MainWindow::About()
+{
+    QMessageBox::information(this,"About","The Minesweeper game is a computer puzzle game whose goal is to clear a field with mines hidden on it.\nA flat or voluminous playing field is divided into adjacent cells, some of them are \"mined\", the number of \"mined\" cells is known in advance.\nThe goal of the game is to open all cells that do not contain mines. The player opens the cells, trying not to open a cell with a mine.\nHaving opened a cell with a mine, he loses.");
 }
 
 void MainWindow::on_button_00_clicked()

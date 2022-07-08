@@ -41,6 +41,7 @@ protected:
 private slots:
     void startGame();
     void chooseDifficulty();
+    void About();
     void on_button_00_clicked();
     void on_button_10_clicked();
     void on_button_20_clicked();
