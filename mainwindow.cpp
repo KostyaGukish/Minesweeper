@@ -24,8 +24,6 @@ void MainWindow::HideUnhideMenu(bool hide)
     ui->groupBox->show();
 }
 
-//dsbvlhsbhdbvdhsvhbvvhbv
-
 void MainWindow::gameOver(QString message)
 {
     for (int i = 0; i < mapLength; i++) {
