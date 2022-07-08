@@ -24,16 +24,22 @@ void MainWindow::HideUnhideMenu(bool hide)
     ui->groupBox->show();
 }
 
-void MainWindow::gameOver()
+void MainWindow::gameOver(QString message)
 {
-    ui->label_2->show();
     for (int i = 0; i < mapLength; i++) {
         for (int j = 0; j < mapWidth; j++) {
             if (buttons[i][j]->isEnabled()) {
-                Clicked(i, j);
+                buttons[i][j]->setEnabled(false);
+                if (field[i][j] == -1) {
+                    buttons[i][j]->setIcon(QIcon("C:\\Qt\\projects\\minesweeper\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
+                }
+                else if (field[i][j] != 0) {
+                    buttons[i][j]->setText(QString::number(field[i][j]));
+                }
             }
         }
     }
+    QMessageBox::information(this, "Game Over", message);
 
 }
 
@@ -138,9 +144,13 @@ MainWindow::MainWindow(QWidget* parent)
     connect(ui->startGame, SIGNAL(clicked()), this, SLOT(startGame()));
     connect(ui->choose, SIGNAL(clicked()), this, SLOT(chooseDifficulty()));
 
-    //TODO
-    ui->groupBox->hide();
-    ui->label_2->hide();
+    ConnectButtons();
+
+    for (int i = 0; i < mapLength; i++) {
+        for (int j = 0; j < mapWidth; j++) {
+            buttons[i][j]->setEnabled(false);
+        }
+    }
 }
 
 MainWindow::~MainWindow()
@@ -166,8 +176,8 @@ bool MainWindow::eventFilter(QEvent* event)
 void MainWindow::Clicked(int x, int y) {
     buttons[x][y]->setEnabled(false);
     if (field[x][y] == -1) {
-        gameOver();
-        buttons[x][y]->setIcon(QIcon("C:\\Users\\MI\\OneDrive\\Рабочий стол\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
+        buttons[x][y]->setIcon(QIcon("C:\\Qt\\projects\\minesweeper\\png-transparent-red-circle-minesweeper-minesweeper-deluxe-minesweeper-adfree-video-games-land-mine-naval-mine-android-thumbnail.png"));
+        gameOver("You lose(");
     }
     else if (field[x][y] != 0) {
         buttons[x][y]->setText(QString::number(field[x][y]));
@@ -264,14 +274,25 @@ void MainWindow::Clicked(int x, int y) {
         }
 
     }
+
+    int k = 0;
+    for (int i = 0; i < mapLength; i++) {
+        for (int j = 0; j < mapWidth; j++) {
+            if (buttons[i][j]->isEnabled()) {
+                k++;
+            }
+        }
+    }
+    if (k == numberMines) {
+        gameOver("You win!");
+    }
 }
 
 void MainWindow::startGame()
 {
-    HideUnhideMenu(true);
-    std::vector<std::pair<int, int>> mines;
+    //HideUnhideMenu(true);
 
-    ConnectButtons();
+    ui->startGame->setText("Restart Game");
 
     for (int i = 0; i < 9; i++) {
         for (int j = 0; j < 9; j++) {
@@ -279,33 +300,42 @@ void MainWindow::startGame()
         }
     }
 
+    for (int i = 0; i < mapLength; i++) {
+        for (int j = 0; j < mapWidth; j++) {
+            buttons[i][j]->setEnabled(true);
+            buttons[i][j]->setText("");
+            buttons[i][j]->setIcon(QIcon());
+        }
+    }
+
     for (int i = 0; i < numberMines; i++) {
-        int x = rand() % mapLength;
-        int y = rand() % mapWidth;
-        mines.push_back(std::make_pair(x, y));
+        int x = rand() % 9;
+        int y = rand() % 9;
+
         field[x][y] = -1;
-        if (x - 1 >= 0 && y - 1 >= 0 && field[x - 1][y - 1] >= 0) {
+
+        if (x - 1 >= 0 && y - 1 >= 0 && field[x - 1][y - 1] != -1) {
             field[x - 1][y - 1]++;
         }
-        if (x + 1 < mapLength && y - 1 >= 0 && field[x + 1][y - 1] >= 0) {
+        if (x + 1 < mapLength && y - 1 >= 0 && field[x + 1][y - 1] != -1) {
             field[x + 1][y - 1]++;
         }
-        if (x - 1 >= 0 && y + 1 < mapWidth && field[x - 1][y + 1] >= 0) {
+        if (x - 1 >= 0 && y + 1 < mapWidth && field[x - 1][y + 1] != -1) {
             field[x - 1][y + 1]++;
         }
-        if (x + 1 < mapLength && y + 1 < mapWidth && field[x + 1][y + 1] >= 0) {
+        if (x + 1 < mapLength && y + 1 < mapWidth && field[x + 1][y + 1] != -1) {
             field[x + 1][y + 1]++;
         }
-        if (x + 1 < mapLength && field[x + 1][y] >= 0) {
+        if (x + 1 < mapLength && field[x + 1][y] != -1) {
             field[x + 1][y]++;
         }
-        if (x - 1 >= 0 && field[x - 1][y] >= 0) {
+        if (x - 1 >= 0 && field[x - 1][y] != -1) {
             field[x - 1][y]++;
         }
-        if (y + 1 < mapWidth && field[x][y + 1] >= 0) {
+        if (y + 1 < mapWidth && field[x][y + 1] != -1) {
             field[x][y + 1]++;
         }
-        if (y - 1 >= 0 && field[x][y - 1] >= 0) {
+        if (y - 1 >= 0 && field[x][y - 1] != -1) {
             field[x][y - 1]++;
         }
     }

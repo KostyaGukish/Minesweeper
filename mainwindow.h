@@ -7,6 +7,7 @@
 #include <QButtonGroup>
 #include <QMouseEvent>
 #include <vector>
+#include <QMessageBox>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,7 +30,7 @@ public:
     void HideUnhideMenu(bool);
     void ConnectButtons();
     void Clicked(int, int);
-    void gameOver();
+    void gameOver(QString message);
     bool eventFilter(QEvent* event);
 private:
     Ui::MainWindow* ui;
